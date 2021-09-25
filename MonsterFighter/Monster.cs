@@ -20,7 +20,10 @@ namespace MonsterFighter
         private MonsterType _type;
         private bool _Advantage;
 
-        public abstract MonsterType GetMonsterType { get; set; }
-        public abstract bool Advantage { get; set; }
+        public abstract MonsterType GetMonsterType { get;}
+        public abstract bool GetAdvantage();
+
+        public abstract void Fight();
+        
     }
 }
