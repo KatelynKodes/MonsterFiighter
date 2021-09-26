@@ -6,24 +6,36 @@ namespace MonsterFighter
 {
     abstract class Monster
     {
-        public enum MonsterType
+        public enum type 
         {
-            DAY, 
+            DAY,
             NIGHT,
             DUSK,
             DAWN
         }
 
-        private float _health;
-        private float _attack;
-        private float _defense;
-        private MonsterType _type;
-        private bool _Advantage;
+        //Variables all classes will need, marked as protected so that only the
+        //inherited classes can change them
+        protected string name;
+        protected type MonsterType;
+        protected float health;
+        protected float attackpower;
+        protected float defensepower;
+        protected bool advantage;
 
-        public abstract MonsterType GetMonsterType { get;}
-        public abstract bool GetAdvantage();
+        //Properties so that members outside of the inherited classes
+        //can read the variables, but not change them
+        public string GetName { get; }
+        public string GetHealth { get; }
+        public float GetAttackPwr { get; }
+        public float GetDefensePwr { get; }
+        public type GetMonsterType { get; }
 
-        public abstract void Fight();
-        
+        //Methods
+        public abstract float DoDamage(Monster attackingMonster, Monster DefendingMonster);
+        public abstract bool GetAdvantage(Monster Opponent);
+        public abstract void WritePetStats();
+        public abstract void DecreaseHealth(float decreasevar);
+        public abstract void IncreaseHealth(float increaseVar);
     }
 }

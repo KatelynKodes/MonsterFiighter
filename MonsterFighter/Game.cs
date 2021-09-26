@@ -27,7 +27,9 @@ namespace MonsterFighter
         }
 
         void Start()
-        { 
+        {
+            _gameOver = false;
+            _currentScene = Scene.MAINMENU;
         }
 
         void Update()
@@ -116,6 +118,7 @@ namespace MonsterFighter
                     DisplayMainMenu();
                     break;
                 case Scene.CHOOSEPET:
+                    ChoosePet();
                     break;
             }
         }
@@ -143,6 +146,39 @@ namespace MonsterFighter
             }
         }
 
-
+        void ChoosePet()
+        {
+            Console.Clear();
+            Console.WriteLine("PRIEST: Welcome, young Seminary! It's a pleasure to have you here");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: You're quite lucky, The ministry chooses only " +
+                "the best of it's students to come here...Especially students as young as yourself");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: But I suppose having young students in the field isn't a bad thing");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: However, enough of my rambling, I should tell you why you're here");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: As a seminary you have been studying creatures that go by the name Etherians");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: Etherians are magical creatures that gain their powers from the sky");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: There are four types, Etherians of Day, Night, Dawn, and Dusk");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: As a future Priest you should know that the ministry holds these creatures " +
+                "in high regard due to their origins tying back to our faith.");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: You are here because you have been chosen by the ministry " +
+                "to recieve a special oppertunity that allows you to not only learn about Etherians " +
+                "but witness their behavior and power for yourself");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: I will grant you an Etherian that is either a Day type or a Night type " +
+                "Based on your choosing.");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: You'll have the oppertunity to choose a Dusk or Dawn " +
+                "Etherial later on.");
+            Console.ReadKey(true);
+            Console.WriteLine("PRIEST: You will take your Etherian with you to different districts and " +
+                "You will prove your worth to other Priests");
+        }
     }
 }
