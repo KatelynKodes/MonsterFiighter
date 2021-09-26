@@ -25,11 +25,11 @@ namespace MonsterFighter
 
         //Properties so that members outside of the inherited classes
         //can read the variables, but not change them
-        public string GetName { get; }
-        public string GetHealth { get; }
-        public float GetAttackPwr { get; }
-        public float GetDefensePwr { get; }
-        public type GetMonsterType { get; }
+        public abstract string GetName { get; }
+        public abstract float GetHealth { get; }
+        public abstract float GetAttackPwr { get; }
+        public abstract float GetDefensePwr { get; }
+        public abstract type GetMonsterType { get; }
 
         //Methods
         public abstract float DoDamage(Monster attackingMonster, Monster DefendingMonster);

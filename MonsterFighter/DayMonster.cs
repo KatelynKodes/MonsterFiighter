@@ -6,6 +6,12 @@ namespace MonsterFighter
 {
     class DayMonster : Monster
     {
+        public override string GetName => name;
+        public override float GetHealth => health;
+        public override type GetMonsterType => MonsterType;
+        public override float GetAttackPwr => attackpower;
+        public override float GetDefensePwr => defensepower;
+
         public DayMonster(string monstrname, float hp, float attk, float def)
         {
             name = monstrname;
@@ -83,10 +89,13 @@ namespace MonsterFighter
         /// </summary>
         public override void WritePetStats()
         {
+            Console.Clear();
             Console.WriteLine("Name:" + GetName);
+            Console.WriteLine("Type: Day");
             Console.WriteLine("HP:" + GetHealth);
             Console.WriteLine("Attack:" + GetAttackPwr);
             Console.WriteLine("Defense:" + GetDefensePwr);
+            Console.ReadKey(true);
         }
     }
 }

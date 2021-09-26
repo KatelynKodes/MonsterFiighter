@@ -15,6 +15,8 @@ namespace MonsterFighter
     {
         private Scene _currentScene;
         private bool _gameOver;
+        private Player _player;
+        private DayMonster _brightling;
 
         public void Run()
         {
@@ -30,6 +32,8 @@ namespace MonsterFighter
         {
             _gameOver = false;
             _currentScene = Scene.MAINMENU;
+            _player = new Player();
+            InitializePets();
         }
 
         void Update()
@@ -40,6 +44,12 @@ namespace MonsterFighter
         void End()
         {
             Console.WriteLine("The application has ended, please close the console");
+        }
+
+        void InitializePets()
+        {
+            //Starters
+            _brightling = new DayMonster("Brightling", 300, 40, 20);
         }
 
 
@@ -118,7 +128,7 @@ namespace MonsterFighter
                     DisplayMainMenu();
                     break;
                 case Scene.CHOOSEPET:
-                    ChoosePet();
+                    ChoosePetScene();
                     break;
             }
         }
@@ -146,11 +156,25 @@ namespace MonsterFighter
             }
         }
 
-        void ChoosePet()
+        void ChoosePetScene()
         {
             Console.Clear();
             Console.WriteLine("PRIEST: Welcome, young Seminary! It's a pleasure to have you here");
             Console.ReadKey(true);
+            Console.WriteLine("PRIEST: Could I perhaps know your name?");
+            string Playername = Console.ReadLine();
+            if (Playername == "" || Playername == " ")
+            {
+                Console.WriteLine("PRIEST: Oh...well that's alright I guess");
+                Console.ReadKey(true);
+                Console.WriteLine("PRIEST: I'll just refer to you as " + _player.GetName + " then.");
+            }
+            else
+            {
+                _player.ChangeName(Playername);
+                Console.WriteLine("PRIEST: A Pleasure to meet you, " + _player.GetName);
+
+            }
             Console.WriteLine("PRIEST: You're quite lucky, The ministry chooses only " +
                 "the best of it's students to come here...Especially students as young as yourself");
             Console.ReadKey(true);
@@ -179,28 +203,48 @@ namespace MonsterFighter
             Console.ReadKey(true);
             Console.WriteLine("PRIEST: You will take your Etherian with you to different districts and " +
                 "You will prove your worth to other Priests");
-            int choosepet = GetInput("PRIEST: Now that you have a decent understanding as to why you're here " +
-                "Tell me, which Etherian would you like?", "Moonhush", "BrightLing", "Check stats");
-            if (choosepet == 1)
-            { 
+            Console.ReadKey(true);
+            ChooseStarterPet();
+            Console.WriteLine("PRIEST: Ah! a " + _player.GetTeam[0].GetName + ", wonderful choice!");
+            Console.ReadKey(true);
+        }
 
-            }
-            if (choosepet == 2)
-            { 
-
-            }
-            if (choosepet == 3)
+        void ChooseStarterPet()
+        {
+            bool starterchosen = false;
+            bool onStatsScreen = false;
+            while (!starterchosen)
             {
-                int _stats = GetInput("Who's stats would you like to view?", "MoonHush", "Brightling", "Return to selection");
-                if (_stats == 1)
-                { 
-                }
-                if (_stats == 2)
-                { 
-                }
-                if (_stats == 3)
+                int choosepet = GetInput("PRIEST: Now that you have a decent understanding as to why you're here " +
+                "Tell me, which Etherian would you like?", "Moonhush", "BrightLing", "Check stats");
+                if (choosepet == 1)
                 {
-                    return;
+
+                }
+                if (choosepet ==  2)
+                {
+                    _player.AddToTeam(_brightling);
+                    starterchosen = true;
+                }
+                if (choosepet == 3)
+                {
+                    onStatsScreen = true;
+                    while (onStatsScreen)
+                    {
+                        int _stats = GetInput("Who's stats would you like to view?", "MoonHush", "Brightling", "Return to selection");
+                        if (_stats == 1)
+                        {
+
+                        }
+                        if (_stats == 2)
+                        {
+                            _brightling.WritePetStats();
+                        }
+                        if (_stats == 3)
+                        {
+                            onStatsScreen = false;
+                        }
+                    }
                 }
             }
         }
