@@ -55,16 +55,16 @@ namespace MonsterFighter
             int InputRecieved = -1;
             string PlayerInput;
 
-            //Writes out prompt and options
-            Console.WriteLine(desc);
-            for (int i = 0; i < options.Length; i++)
-            {
-                Console.WriteLine("[" + (i + 1) + "] " + options[i]);
-            }
-
             //Checks to see if the input the player selected is a valid input
             while (InputRecieved == -1)
             {
+                Console.Clear();
+                //Writes out prompt and options
+                Console.WriteLine(desc);
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Console.WriteLine("[" + (i + 1) + "] " + options[i]);
+                }
                 Console.Write(">");
                 PlayerInput = Console.ReadLine();
 
@@ -179,6 +179,30 @@ namespace MonsterFighter
             Console.ReadKey(true);
             Console.WriteLine("PRIEST: You will take your Etherian with you to different districts and " +
                 "You will prove your worth to other Priests");
+            int choosepet = GetInput("PRIEST: Now that you have a decent understanding as to why you're here " +
+                "Tell me, which Etherian would you like?", "Moonhush", "BrightLing", "Check stats");
+            if (choosepet == 1)
+            { 
+
+            }
+            if (choosepet == 2)
+            { 
+
+            }
+            if (choosepet == 3)
+            {
+                int _stats = GetInput("Who's stats would you like to view?", "MoonHush", "Brightling", "Return to selection");
+                if (_stats == 1)
+                { 
+                }
+                if (_stats == 2)
+                { 
+                }
+                if (_stats == 3)
+                {
+                    return;
+                }
+            }
         }
     }
 }
