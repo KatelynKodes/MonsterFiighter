@@ -6,7 +6,8 @@ namespace MonsterFighter
 {
     abstract class Monster
     {
-        public enum type 
+        //The types a monster can have
+        public enum type
         {
             DAY,
             NIGHT,
@@ -19,6 +20,7 @@ namespace MonsterFighter
         protected string name;
         protected type MonsterType;
         protected float health;
+        protected float maxHealth;
         protected float attackpower;
         protected float defensepower;
         protected bool advantage;
@@ -27,15 +29,42 @@ namespace MonsterFighter
         //can read the variables, but not change them
         public abstract string GetName { get; }
         public abstract float GetHealth { get; }
+        public abstract float GetMaxHealth { get; }
         public abstract float GetAttackPwr { get; }
         public abstract float GetDefensePwr { get; }
         public abstract type GetMonsterType { get; }
 
-        //Methods
-        public abstract float DoDamage(Monster attackingMonster, Monster DefendingMonster);
+        //Abstract Methods
         public abstract bool GetAdvantage(Monster Opponent);
         public abstract void WritePetStats();
-        public abstract void DecreaseHealth(float decreasevar);
-        public abstract void IncreaseHealth(float increaseVar);
+
+
+        //Virtual Methods 
+        public virtual void DecreaseHealth(float decreasevar)
+        {
+            health -= decreasevar;
+        }
+        public virtual void IncreaseHealth(float increaseVar)
+        {
+            health -= increaseVar;
+        }
+        public virtual float DoDamage(Monster DefendingMonster)
+        {
+            float damagedealt = GetAttackPwr - DefendingMonster.GetDefensePwr;
+            if (damagedealt <= 0)
+            {
+                damagedealt = 0;
+            }
+            else
+            {
+                //Checks advantage against the defender
+                if (GetAdvantage(DefendingMonster))
+                {
+                    damagedealt += 5;
+                }
+            }
+
+            return damagedealt;
+        }
     }
 }

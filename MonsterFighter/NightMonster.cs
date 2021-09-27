@@ -9,33 +9,28 @@ namespace MonsterFighter
         //Properties
         public override string GetName => name;
         public override float GetHealth => health;
+        public override float GetMaxHealth => maxHealth;
         public override float GetAttackPwr => attackpower;
         public override float GetDefensePwr => defensepower;
         public override type GetMonsterType => MonsterType;
 
+        //Constructor
         public NightMonster(string monstrname, float hp, float attk, float def)
         {
             name = monstrname;
             health = hp;
+            maxHealth = health;
             attackpower = attk;
             defensepower = def;
             MonsterType = type.NIGHT;
         }
 
-        public override float DoDamage(Monster attackingMonster, Monster DefendingMonster)
-        {
-            
-        }
-
         public override bool GetAdvantage(Monster Opponent)
         {
+            advantage = false;
             if (Opponent.GetMonsterType == type.DAY || Opponent.GetMonsterType == type.DUSK)
             {
                 advantage = true;
-            }
-            else
-            {
-                advantage = false;
             }
 
             return advantage;
@@ -46,20 +41,10 @@ namespace MonsterFighter
             Console.Clear();
             Console.WriteLine("Name:" + GetName);
             Console.WriteLine("Type: Night");
-            Console.WriteLine("HP:" + GetHealth);
+            Console.WriteLine("HP:" + GetHealth +  "/" + GetMaxHealth);
             Console.WriteLine("Attack:" + GetAttackPwr);
             Console.WriteLine("Defense:" + GetDefensePwr);
             Console.ReadKey(true);
-        }
-
-        public override void DecreaseHealth(float decreasevar)
-        {
-            health -= decreasevar;
-        }
-
-        public override void IncreaseHealth(float increaseVar)
-        {
-            throw new NotImplementedException();
         }
     }
 }

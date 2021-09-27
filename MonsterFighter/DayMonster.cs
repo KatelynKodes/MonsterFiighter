@@ -8,6 +8,7 @@ namespace MonsterFighter
     {
         public override string GetName => name;
         public override float GetHealth => health;
+        public override float GetMaxHealth => maxHealth;
         public override type GetMonsterType => MonsterType;
         public override float GetAttackPwr => attackpower;
         public override float GetDefensePwr => defensepower;
@@ -16,53 +17,10 @@ namespace MonsterFighter
         {
             name = monstrname;
             health = hp;
+            maxHealth = hp;
             attackpower = attk;
             defensepower = def;
             MonsterType = type.DAY;
-        }
-
-        /// <summary>
-        /// Returns a float based on how much damage the attacking monster does to
-        /// the defending monster
-        /// </summary>
-        /// <param name="Attacker"> The attacking monster </param>
-        /// <param name="Defender"> The Defending Monster</param>
-        /// <returns></returns>
-        public override float DoDamage(Monster Attacker, Monster Defender)
-        {
-            float damagedealt = Attacker.GetAttackPwr - Defender.GetDefensePwr;
-            if (damagedealt <= 0)
-            {
-                damagedealt = 0;
-            }
-            else
-            {
-                //Checks advantage against the defender
-                if (GetAdvantage(Defender))
-                {
-                    damagedealt += 5;
-                }
-            }
-
-            return damagedealt;
-        }
-
-        /// <summary>
-        /// Increases the health of a monster by a certain variable
-        /// </summary>
-        /// <param name="increaseNum"> Number the variable is increased by</param>
-        public override void IncreaseHealth(float increaseNum)
-        {
-            health += increaseNum;
-        }
-
-        /// <summary>
-        /// Decreases the health of the monster by a certain variable
-        /// </summary>
-        /// <param name="decreasevar"> Number the variable is decreased by</param>
-        public override void DecreaseHealth(float decreasevar)
-        {
-            health -= decreasevar;
         }
 
         /// <summary>
@@ -72,13 +30,10 @@ namespace MonsterFighter
         /// <returns></returns>
         public override bool GetAdvantage(Monster Opponent)
         {
+            advantage = false;
             if (Opponent.GetMonsterType == type.NIGHT || Opponent.GetMonsterType == type.DAWN)
             {
                 advantage = true;
-            }
-            else
-            {
-                advantage = false;
             }
 
             return advantage;
@@ -92,7 +47,7 @@ namespace MonsterFighter
             Console.Clear();
             Console.WriteLine("Name:" + GetName);
             Console.WriteLine("Type: Day");
-            Console.WriteLine("HP:" + GetHealth);
+            Console.WriteLine("HP:" + GetHealth + "/" + GetMaxHealth);
             Console.WriteLine("Attack:" + GetAttackPwr);
             Console.WriteLine("Defense:" + GetDefensePwr);
             Console.ReadKey(true);
