@@ -38,13 +38,11 @@ namespace MonsterFighter
 
         public override void WritePetStats()
         {
-            Console.Clear();
             Console.WriteLine("Name:" + GetName);
             Console.WriteLine("Type: Night");
             Console.WriteLine("HP:" + GetHealth +  "/" + GetMaxHealth);
             Console.WriteLine("Attack:" + GetAttackPwr);
             Console.WriteLine("Defense:" + GetDefensePwr);
-            Console.ReadKey(true);
         }
     }
 }

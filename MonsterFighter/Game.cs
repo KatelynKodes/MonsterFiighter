@@ -8,7 +8,9 @@ namespace MonsterFighter
     {
         MAINMENU,
         CHOOSEPET,
-        DAWNDISTRICT
+        DAWNDISTRICT,
+        DAWNBATTLE,
+        REPLAYMENU
     }
 
 
@@ -18,14 +20,18 @@ namespace MonsterFighter
         private bool _gameOver;
         private Player _player;
         bool ExitDistrictMenu;
+        private Enemy _currentEnemy;
+
+        //Enemies
+        private Enemy _dawnEnemy;
 
         //Monsters for player
         private DayMonster _brightling;
         private NightMonster _moonHush;
 
         //EnemyMonsters
-
         //Dawns Team
+        private Monster[] _dawnMonsters;
         private DuskMonster _whispurn;
         private DuskMonster _Snoozem;
         private DawnMonster _EarlyBird;
@@ -46,6 +52,7 @@ namespace MonsterFighter
             _currentScene = Scene.MAINMENU;
             _player = new Player();
             InitializePets();
+            InitializeEnemies();
         }
 
         void Update()
@@ -69,7 +76,13 @@ namespace MonsterFighter
             _whispurn = new DuskMonster("Whispurn", 300, 30, 20);
             _Snoozem = new DuskMonster("Snoozem", 200, 30, 40);
             _EarlyBird = new DawnMonster("EarlyBird", 400, 20, 30);
+            _dawnMonsters = new Monster[] { _whispurn, _Snoozem, _EarlyBird };
             
+        }
+
+        void InitializeEnemies()
+        {
+            _dawnEnemy = new Enemy("Dawn", _dawnMonsters);
         }
 
 
@@ -153,6 +166,12 @@ namespace MonsterFighter
                 case Scene.DAWNDISTRICT:
                     District1Scene();
                     break;
+                case Scene.DAWNBATTLE:
+                    MonsterBattle();
+                    break;
+                case Scene.REPLAYMENU:
+                    DisplayReplayMenu();
+                    break;
             }
         }
         
@@ -174,6 +193,26 @@ namespace MonsterFighter
                     //loadgame
                     break;
                 case 3:
+                    _gameOver = true;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Allows player to replay the game after game has been fully completed.
+        /// </summary>
+        void DisplayReplayMenu()
+        {
+            int playAgain = GetInput("Would you like to play again?", "Yes", "No");
+            switch (playAgain)
+            {
+                case 1:
+                    _player = new Player();
+                    InitializePets();
+                    InitializeEnemies();
+                    _currentScene = Scene.CHOOSEPET;
+                    break;
+                case 2:
                     _gameOver = true;
                     break;
             }
@@ -232,9 +271,13 @@ namespace MonsterFighter
             Console.WriteLine("PRIEST: Ah! a " + _player.GetTeam[0].GetName + ", wonderful choice!");
             Console.ReadKey(true);
             Console.WriteLine("PRIEST: Before you head off to the first district there is one more thing I'd like you to know");
+            Console.ReadKey(true);
             Console.WriteLine("PRIEST: There should be 2 churches in each district, one being the church of whomever you're battling and The Church of Ether");
+            Console.ReadKey(true);
             Console.WriteLine("PRIEST: You can SAVE, LOAD, and QUIT in the Churches of Ether");
+            Console.ReadKey(true);
             Console.WriteLine("PRIEST: That is all the information I have for you, " + _player.GetName + ", go forth and do well. May the Etherians bless you.");
+            Console.ReadKey(true);
             _currentScene = Scene.DAWNDISTRICT;
         }
 
@@ -242,7 +285,9 @@ namespace MonsterFighter
         {
             Console.Clear();
             Console.WriteLine("You venture along until you reach the first district, a city known for it's plentiful variety of dawn and dusk Etherians");
+            Console.ReadKey(true);
             Console.WriteLine("It's in this district a Priestess by the name of Dawn resides, her name fitting for the types that she wields.");
+            Console.ReadKey(true);
             ExitDistrictMenu = false;
             while (!ExitDistrictMenu)
             {
@@ -253,26 +298,37 @@ namespace MonsterFighter
                         Hospital(_player.GetTeam);
                         break;
                     case 2:
+                        Console.WriteLine("You make your way towards the church of sunrise, it's glistening beauty standing before you.");
+                        Console.ReadKey(true);
+                        Console.WriteLine("It looks calm, peaceful even, much like a quiet morning.");
+                        Console.ReadKey(true);
+                        Console.WriteLine("You walk into the chapel to be greeted by a priestess.");
+                        Console.ReadKey(true);
+                        Console.WriteLine("LADY DAWN: Hello there, " + _player.GetName + ", its a pleasure to meet you. I'm Lady Dawn, the priestess of this district");
+                        Console.ReadKey(true);
+                        Console.WriteLine("LADY DAWN: You must be here to prove yourself to me so you can further yourself as a priest.");
+                        Console.ReadKey(true);
+                        Console.WriteLine("LADY DAWN: Very well then, let me see what you're capable of, if you win against me I'll share " +
+                            "my knowledge of Dawn and Dusk types with you.");
+                        Console.ReadKey(true);
+                        _currentEnemy = _dawnEnemy;
                         ExitDistrictMenu = true;
+                        _currentScene = Scene.DAWNBATTLE;
                         break;
                     case 3:
                         SaveChurch();
                         break;
                 }
             }
-            Console.WriteLine("You make your way towards the church of sunrise, it's glistening beauty standing before you.");
-            Console.WriteLine("It looks calm, peaceful even, much like a quiet morning.");
-            Console.WriteLine("You walk into the chapel to be greeted by a priestess.");
-            Console.WriteLine("LADY DAWN: Hello there, " + _player.GetName + ", its a pleasure to meet you. I'm Lady Dawn, the priestess of this district");
-            Console.WriteLine("LADY DAWN: You must be here to prove yourself to me so you can further yourself as a priest.");
-            Console.WriteLine("LADY DAWN: Very well then, let me see what you're capable of, if you win against me I'll share " +
-                "my knowledge of Dawn and Dusk types with you.");
-
-
+            
         }
 
-
-        //NOTE TO SELF: MAKE THIS FUNCTION MORE APPLICABLE TO ALL CASES CHOOSING MONSTERS
+        /// <summary>
+        /// Allows a player to choose between two monsters
+        /// </summary>
+        /// <param name="desc"> The prompt the player must answer</param>
+        /// <param name="monster1"> 1st monster player must choose from</param>
+        /// <param name="monster2"> 2nd monster player must choose from</param>
         void ChooseStarterPet(string desc, Monster monster1, Monster monster2)
         {
             bool starterchosen = false;
@@ -298,11 +354,15 @@ namespace MonsterFighter
                         int _stats = GetInput("Who's stats would you like to view?", monster1.GetName, monster2.GetName, "Return to selection");
                         if (_stats == 1)
                         {
+                            Console.Clear();
                             monster1.WritePetStats();
+                            Console.ReadKey(true);
                         }
                         if (_stats == 2)
                         {
+                            Console.Clear();
                             monster2.WritePetStats();
+                            Console.ReadKey(true);
                         }
                         if (_stats == 3)
                         {
@@ -332,6 +392,7 @@ namespace MonsterFighter
                     //Heals Etherians
                     case 1:
                         Console.WriteLine("NURSE PENNY: Sure, let me just take your etherians off your hands so I can heal them.");
+                        Console.ReadKey(true);
                         float amountToHeal;
                         //Loops through the array of monsters to heal
                         for (int i = 0; i < TeamToHeal.Length; i++)
@@ -345,6 +406,7 @@ namespace MonsterFighter
                             }
                         }
                         Console.WriteLine("NURSE PENNY: There you go, all your Etherians should be restored to full health");
+                        Console.ReadKey(true);
                         break;
 
                     //Breaks the loop causing player to leave hospital
@@ -377,11 +439,76 @@ namespace MonsterFighter
                     //ends the game
                     case 3:
                         _gameOver = true;
+                        finishedChurch = true;
+                        ExitDistrictMenu = true;
                         break;
                     //leaves the church
                     case 4:
                         finishedChurch = true;
                         break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Allows two monsters to fight each other
+        /// </summary>
+        void MonsterBattle()
+        {
+            Monster PlayerMonster = _player.GetTeam[_player.GetCurrentMonstrIndex];
+            Monster EnemyMonster = _currentEnemy._GetEnemyTeam[_currentEnemy.GetCurrentMonsterIndex];
+            float damagetaken = 0;
+
+            //Print stats
+            Console.Clear();
+            Console.WriteLine("PLAYER:" + _player.GetName.ToUpper());
+            PlayerMonster.WritePetStats();
+            Console.WriteLine("");
+            Console.WriteLine("OPPONENT:" + _currentEnemy.GetEnemyName.ToUpper());
+            EnemyMonster.WritePetStats();
+            Console.ReadKey(true);
+            Console.Clear();
+
+            //Fight
+            Console.Clear();
+
+            //Player turn
+            damagetaken = PlayerMonster.DoDamage(EnemyMonster);
+            Console.WriteLine(PlayerMonster.GetName + " Attacks " + EnemyMonster.GetName + " and does " + damagetaken + " damage.");
+            if (PlayerMonster.GetAdvantage(EnemyMonster))
+            {
+                //checks advantage
+                Console.WriteLine(PlayerMonster.GetName + " has advantage!");
+            }
+            EnemyMonster.DecreaseHealth(damagetaken);
+            Console.ReadKey(true);
+            damagetaken = EnemyMonster.DoDamage(PlayerMonster);
+
+            //Enemy turn
+            Console.WriteLine(EnemyMonster.GetName + " Attacks " + PlayerMonster.GetName + " and does " + damagetaken + " damage.");
+            if (EnemyMonster.GetAdvantage(PlayerMonster))
+            {
+                //Checks advantage
+                Console.WriteLine(EnemyMonster.GetName + " has advantage!");
+            }
+            EnemyMonster.DecreaseHealth(damagetaken);
+            Console.ReadKey(true);
+            Console.Clear();
+        }
+
+        /// <summary>
+        /// Updates the monsters in the player and the current enemy's team.
+        /// </summary>
+        void UpdateMonsters()
+        {
+            Monster EnemyMonster = _currentEnemy._GetEnemyTeam[_currentEnemy.GetCurrentMonsterIndex];
+            Monster CurrentPlayerMonster = _player.GetTeam[_player.GetCurrentMonstrIndex];
+            if (EnemyMonster.GetHealth <= 0)
+            {
+                _currentEnemy.IncreaseEnemyMonsterIndex(_currentEnemy.CanIncreaseEnemyIndex());
+                if (!_currentEnemy.CanIncreaseEnemyIndex())
+                {
+                    Console.WriteLine("The enemy cant increase their index any further");
                 }
             }
         }

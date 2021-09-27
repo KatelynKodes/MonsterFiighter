@@ -10,6 +10,7 @@ namespace MonsterFighter
         private string _name;
         private Monster[] _team;
         private int _monsterTeamLength;
+        private int _currentMonsterIndex;
 
         //Properties
         public string GetName
@@ -23,6 +24,12 @@ namespace MonsterFighter
         {
             get
             { return _team; }
+        }
+
+        public int GetCurrentMonstrIndex
+        {
+            get
+            { return _currentMonsterIndex; }
         }
 
         public Player()
@@ -55,6 +62,14 @@ namespace MonsterFighter
             newTeam[newTeam.Length - 1] = MonsterToAdd;
             _team = newTeam;
             _monsterTeamLength = _team.Length;
+        }
+
+        public void IncreaseCurrentMonIndex(bool CanIncrease)
+        {
+            if (CanIncrease)
+            {
+                _currentMonsterIndex++;
+            }
         }
 
     }
