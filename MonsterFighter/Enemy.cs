@@ -9,7 +9,6 @@ namespace MonsterFighter
         private string _Enemyname;
         private Monster[] _EnemyTeam;
         private int _currentMonsterIndex;
-        private Monster _currentMonster;
 
         public Monster[] _GetEnemyTeam 
         {
@@ -39,17 +38,29 @@ namespace MonsterFighter
             _EnemyTeam = Team;
         }
 
-        public void IncreaseEnemyMonsterIndex(bool canIncrease)
+        /// <summary>
+        /// Checks if you can increase the current monster index by passing in a bool
+        /// to see if increasing is NOT possible.
+        /// </summary>
+        /// <param name="cantIncrease"> The bool the method must check if the index cant be increased</param>
+        /// <returns></returns>
+        public int IncreaseEnemyMonsterIndex(bool cantIncrease)
         {
-            if (canIncrease)
+            if (!cantIncrease)
             {
                 _currentMonsterIndex++;
             }
+
+            return _currentMonsterIndex;
         }
 
-        public bool CanIncreaseEnemyIndex()
+        /// <summary>
+        /// Checks if the current monster index is too large
+        /// </summary>
+        /// <returns></returns>
+        public bool IndexTooLarge()
         {
-            bool checkindex = _currentMonsterIndex >= _EnemyTeam.Length;
+            bool checkindex = _currentMonsterIndex >= this._GetEnemyTeam.Length;
 
             return checkindex;
         }

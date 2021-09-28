@@ -51,17 +51,18 @@ namespace MonsterFighter
         public virtual float DoDamage(Monster DefendingMonster)
         {
             float damagedealt = GetAttackPwr - DefendingMonster.GetDefensePwr;
+
+            //Checks advantage against the defender
+            if (GetAdvantage(DefendingMonster))
+            {
+                damagedealt += 5;
+            }
+
+            //Checks if the damage dealt is <= 0;
+            //Even with advantage
             if (damagedealt <= 0)
             {
                 damagedealt = 0;
-            }
-            else
-            {
-                //Checks advantage against the defender
-                if (GetAdvantage(DefendingMonster))
-                {
-                    damagedealt += 5;
-                }
             }
 
             return damagedealt;

@@ -64,12 +64,25 @@ namespace MonsterFighter
             _monsterTeamLength = _team.Length;
         }
 
-        public void IncreaseCurrentMonIndex(bool CanIncrease)
+        public int IncreaseCurrentMonIndex(bool CanIncrease)
         {
             if (CanIncrease)
             {
                 _currentMonsterIndex++;
             }
+
+            return _currentMonsterIndex;
+        }
+
+        /// <summary>
+        /// Checks if the current monster index is too large
+        /// </summary>
+        /// <returns></returns>
+        public bool IndexTooLarge()
+        {
+            bool checkindex = _currentMonsterIndex >= this.GetTeam.Length;
+
+            return checkindex;
         }
 
     }

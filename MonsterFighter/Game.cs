@@ -21,6 +21,8 @@ namespace MonsterFighter
         private Player _player;
         bool ExitDistrictMenu;
         private Enemy _currentEnemy;
+        private Monster _currentEnemyMonster;
+        private Monster _currentPlayerMonster;
 
         //Enemies
         private Enemy _dawnEnemy;
@@ -168,6 +170,7 @@ namespace MonsterFighter
                     break;
                 case Scene.DAWNBATTLE:
                     MonsterBattle();
+                    UpdateMonsters();
                     break;
                 case Scene.REPLAYMENU:
                     DisplayReplayMenu();
@@ -285,7 +288,6 @@ namespace MonsterFighter
         {
             Console.Clear();
             Console.WriteLine("You venture along until you reach the first district, a city known for it's plentiful variety of dawn and dusk Etherians");
-            Console.ReadKey(true);
             Console.WriteLine("It's in this district a Priestess by the name of Dawn resides, her name fitting for the types that she wields.");
             Console.ReadKey(true);
             ExitDistrictMenu = false;
@@ -312,6 +314,8 @@ namespace MonsterFighter
                             "my knowledge of Dawn and Dusk types with you.");
                         Console.ReadKey(true);
                         _currentEnemy = _dawnEnemy;
+                        _currentEnemyMonster = _dawnEnemy._GetEnemyTeam[_dawnEnemy.GetCurrentMonsterIndex];
+                        _currentPlayerMonster = _player.GetTeam[_player.GetCurrentMonstrIndex];
                         ExitDistrictMenu = true;
                         _currentScene = Scene.DAWNBATTLE;
                         break;
@@ -455,17 +459,15 @@ namespace MonsterFighter
         /// </summary>
         void MonsterBattle()
         {
-            Monster PlayerMonster = _player.GetTeam[_player.GetCurrentMonstrIndex];
-            Monster EnemyMonster = _currentEnemy._GetEnemyTeam[_currentEnemy.GetCurrentMonsterIndex];
             float damagetaken = 0;
 
             //Print stats
             Console.Clear();
             Console.WriteLine("PLAYER:" + _player.GetName.ToUpper());
-            PlayerMonster.WritePetStats();
+            _currentPlayerMonster.WritePetStats();
             Console.WriteLine("");
             Console.WriteLine("OPPONENT:" + _currentEnemy.GetEnemyName.ToUpper());
-            EnemyMonster.WritePetStats();
+            _currentEnemyMonster.WritePetStats();
             Console.ReadKey(true);
             Console.Clear();
 
@@ -473,25 +475,25 @@ namespace MonsterFighter
             Console.Clear();
 
             //Player turn
-            damagetaken = PlayerMonster.DoDamage(EnemyMonster);
-            Console.WriteLine(PlayerMonster.GetName + " Attacks " + EnemyMonster.GetName + " and does " + damagetaken + " damage.");
-            if (PlayerMonster.GetAdvantage(EnemyMonster))
+            damagetaken = _currentPlayerMonster.DoDamage(_currentEnemyMonster);
+            Console.WriteLine(_currentPlayerMonster.GetName + " Attacks " + _currentEnemyMonster.GetName + " and does " + damagetaken + " damage.");
+            if (_currentPlayerMonster.GetAdvantage(_currentEnemyMonster))
             {
                 //checks advantage
-                Console.WriteLine(PlayerMonster.GetName + " has advantage!");
+                Console.WriteLine(_currentPlayerMonster.GetName + " has advantage!");
             }
-            EnemyMonster.DecreaseHealth(damagetaken);
+            _currentEnemyMonster.DecreaseHealth(damagetaken);
             Console.ReadKey(true);
-            damagetaken = EnemyMonster.DoDamage(PlayerMonster);
+            damagetaken = _currentEnemyMonster.DoDamage(_currentPlayerMonster);
 
             //Enemy turn
-            Console.WriteLine(EnemyMonster.GetName + " Attacks " + PlayerMonster.GetName + " and does " + damagetaken + " damage.");
-            if (EnemyMonster.GetAdvantage(PlayerMonster))
+            Console.WriteLine(_currentEnemyMonster.GetName + " Attacks " + _currentPlayerMonster.GetName + " and does " + damagetaken + " damage.");
+            if (_currentEnemyMonster.GetAdvantage(_currentPlayerMonster))
             {
                 //Checks advantage
-                Console.WriteLine(EnemyMonster.GetName + " has advantage!");
+                Console.WriteLine(_currentEnemyMonster.GetName + " has advantage!");
             }
-            EnemyMonster.DecreaseHealth(damagetaken);
+            _currentEnemyMonster.DecreaseHealth(damagetaken);
             Console.ReadKey(true);
             Console.Clear();
         }
@@ -501,16 +503,30 @@ namespace MonsterFighter
         /// </summary>
         void UpdateMonsters()
         {
-            Monster EnemyMonster = _currentEnemy._GetEnemyTeam[_currentEnemy.GetCurrentMonsterIndex];
-            Monster CurrentPlayerMonster = _player.GetTeam[_player.GetCurrentMonstrIndex];
-            if (EnemyMonster.GetHealth <= 0)
+            int NewIndex = 0;
+            if (_currentEnemyMonster.GetHealth <= 0)
             {
-                _currentEnemy.IncreaseEnemyMonsterIndex(_currentEnemy.CanIncreaseEnemyIndex());
-                if (!_currentEnemy.CanIncreaseEnemyIndex())
+                NewIndex = _currentEnemy.IncreaseEnemyMonsterIndex(_currentEnemy.IndexTooLarge());
+                if (_currentEnemy.IndexTooLarge())
                 {
-                    Console.WriteLine("The enemy cant increase their index any further");
+                    return;
                 }
+                _currentEnemyMonster = _currentEnemy._GetEnemyTeam[NewIndex];
+                Console.WriteLine(_currentEnemy.GetEnemyName.ToUpper() + " summoned " + _currentEnemyMonster.GetName.ToUpper());
+                Console.ReadKey(true);
+            }
+            if (_currentPlayerMonster.GetHealth <= 0)
+            {
+                NewIndex = _player.IncreaseCurrentMonIndex(_player.IndexTooLarge());
+                if (_player.IndexTooLarge())
+                {
+                    return;
+                }
+                _currentPlayerMonster = _player.GetTeam[NewIndex];
+                Console.WriteLine(_player.GetName.ToUpper() + " summoned " + _currentEnemyMonster.GetName.ToUpper());
+                Console.ReadKey(true);
             }
         }
+
     }
 }
