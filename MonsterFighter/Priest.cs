@@ -48,10 +48,6 @@ namespace MonsterFighter
         public virtual void Save(StreamWriter writer)
         {
             writer.WriteLine(_name);
-            for (int i = 0; i < _team.Length; i++)
-            {
-                _team[i].Save(writer);
-            }
             writer.WriteLine(_currMonsterIndex);
         }
 
@@ -63,19 +59,10 @@ namespace MonsterFighter
                 return loadSuccess = false;
             }
 
-            for (int i = 0; i < _team.Length; i++)
-            {
-                if (!_team[i].Load(reader))
-                {
-                    return loadSuccess = false;
-                }
-            }
-
             if (!int.TryParse(reader.ReadLine(), out _currMonsterIndex))
             {
                 return loadSuccess = false;
             }
-            reader.Close();
             return loadSuccess;
         }
     }

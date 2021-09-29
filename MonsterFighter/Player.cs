@@ -15,6 +15,12 @@ namespace MonsterFighter
         public override Monster[] GetTeam => _team;
         public override int GetCurrMonIndex => _currMonsterIndex;
 
+        public int GetMonsterTeamLength 
+        {
+            get
+            { return _monsterTeamLength; } 
+        }
+
 
         public Player()
         {
@@ -30,6 +36,11 @@ namespace MonsterFighter
         public void ChangeName(string NewName)
         {
             _name = NewName;
+        }
+
+        public void ReInitializeTeam(Monster[] newteam)
+        {
+            _team = newteam;
         }
 
         /// <summary>
@@ -52,6 +63,10 @@ namespace MonsterFighter
         {
             base.Save(writer);
             writer.WriteLine(_monsterTeamLength);
+            for (int i = 0; i < _team.Length; i++)
+            {
+                _team[i].Save(writer);
+            }
         }
 
         public override bool Load(StreamReader reader)
@@ -65,7 +80,6 @@ namespace MonsterFighter
             {
                 return success = false;
             }
-            reader.Close();
             return success;
         }
     }

@@ -87,6 +87,20 @@ namespace MonsterFighter
             {
                 return LoadSuccess = false;
             }
+
+            //Reloading Monsters back into Players Team
+            Monster[] NewTeam = new Monster[_player.GetMonsterTeamLength];
+            for (int i = 0; i < _player.GetMonsterTeamLength; i++)
+            {
+                if (reader.ReadLine().ToLower() == "night")
+                {
+                    NightMonster BaseNightMonster = new NightMonster("none", 0, 0, 0);
+                    BaseNightMonster.Load(reader);
+                    NewTeam[i] = BaseNightMonster;
+                }
+            }
+            _player.ReInitializeTeam(NewTeam);
+
             if (reader.ReadLine() != _currentScene.ToString())
             {
                 return LoadSuccess = false;
@@ -263,7 +277,6 @@ namespace MonsterFighter
                 case 2:
                     if (!Load())
                     {
-                        Console.WriteLine("There has been an issue loading your save data.");
                         Console.ReadKey(true);
                     }
                     break;
