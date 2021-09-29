@@ -1,36 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace MonsterFighter
 {
-    class Player
+    class Player : Priest
     {
-        //Private Vars
-        private string _name;
-        private Monster[] _team;
+        //private variables
         private int _monsterTeamLength;
-        private int _currentMonsterIndex;
 
         //Properties
-        public string GetName
-        {
-            get
-            {
-                return _name;
-            }
-        }
-        public Monster[] GetTeam
-        {
-            get
-            { return _team; }
-        }
+        public override string GetName => _name;
+        public override Monster[] GetTeam => _team;
+        public override int GetCurrMonIndex => _currMonsterIndex;
 
-        public int GetCurrentMonstrIndex
-        {
-            get
-            { return _currentMonsterIndex; }
-        }
 
         public Player()
         {
@@ -64,26 +48,25 @@ namespace MonsterFighter
             _monsterTeamLength = _team.Length;
         }
 
-        public int IncreaseCurrentMonIndex(bool CanIncrease)
+        public override void Save(StreamWriter writer)
         {
-            if (CanIncrease)
+            base.Save(writer);
+            writer.WriteLine(_monsterTeamLength);
+        }
+
+        public override bool Load(StreamReader reader)
+        {
+            bool success = true;
+            if (!base.Load(reader))
             {
-                _currentMonsterIndex++;
+                return success = false;
             }
-
-            return _currentMonsterIndex;
+            if (!int.TryParse(reader.ReadLine(), out _monsterTeamLength))
+            {
+                return success = false;
+            }
+            reader.Close();
+            return success;
         }
-
-        /// <summary>
-        /// Checks if the current monster index is too large
-        /// </summary>
-        /// <returns></returns>
-        public bool IndexTooLarge()
-        {
-            bool checkindex = _currentMonsterIndex >= this.GetTeam.Length;
-
-            return checkindex;
-        }
-
     }
 }

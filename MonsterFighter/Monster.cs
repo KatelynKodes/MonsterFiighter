@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace MonsterFighter
 {
@@ -66,6 +67,48 @@ namespace MonsterFighter
             }
 
             return damagedealt;
+        }
+
+        public virtual void Save(StreamWriter writer)
+        {
+            writer.WriteLine(name);
+            writer.WriteLine(MonsterType);
+            writer.WriteLine(health);
+            writer.WriteLine(maxHealth);
+            writer.WriteLine(attackpower);
+            writer.WriteLine(defensepower);
+        }
+
+        public virtual bool Load(StreamReader reader)
+        {
+            bool success = true;
+            if (reader.ReadLine() != name)
+            {
+                return success = false;
+            }
+            if (reader.ReadLine() != MonsterType.ToString())
+            {
+                return success = false;
+            }
+            if (!float.TryParse(reader.ReadLine(), out health))
+            {
+                return success = false;
+            }
+            if (!float.TryParse(reader.ReadLine(), out maxHealth))
+            {
+                return success = false;
+            }
+            if (!float.TryParse(reader.ReadLine(), out attackpower))
+            {
+                return success = false;
+            }
+            if (!float.TryParse(reader.ReadLine(), out defensepower))
+            {
+                return success = false;
+            }
+
+            reader.Close();
+            return success;
         }
     }
 }
