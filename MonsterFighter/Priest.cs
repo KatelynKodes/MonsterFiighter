@@ -54,10 +54,7 @@ namespace MonsterFighter
         public virtual bool Load(StreamReader reader)
         {
             bool loadSuccess = true;
-            if (reader.ReadLine() != _name)
-            {
-                return loadSuccess = false;
-            }
+            _name = reader.ReadLine();
 
             if (!int.TryParse(reader.ReadLine(), out _currMonsterIndex))
             {

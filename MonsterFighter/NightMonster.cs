@@ -50,10 +50,7 @@ namespace MonsterFighter
         public bool Load(StreamReader reader)
         {
             bool success = true;
-            if (reader.ReadLine() != name)
-            {
-                return success = false;
-            }
+            name = reader.ReadLine();
             if (!float.TryParse(reader.ReadLine(), out health))
             {
                 return success = false;

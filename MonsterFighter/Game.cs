@@ -92,18 +92,38 @@ namespace MonsterFighter
             Monster[] NewTeam = new Monster[_player.GetMonsterTeamLength];
             for (int i = 0; i < _player.GetMonsterTeamLength; i++)
             {
-                if (reader.ReadLine().ToLower() == "night")
+                switch (reader.ReadLine().ToLower())
                 {
-                    NightMonster BaseNightMonster = new NightMonster("none", 0, 0, 0);
-                    BaseNightMonster.Load(reader);
-                    NewTeam[i] = BaseNightMonster;
+                    case "night":
+                        NightMonster BaseNightMonster = new NightMonster("none", 0, 0, 0);
+                        BaseNightMonster.Load(reader);
+                        NewTeam[i] = BaseNightMonster;
+                        break;
+                    case "day":
+                        DayMonster BaseDayMonster = new DayMonster("none", 0, 0, 0);
+                        BaseDayMonster.Load(reader);
+                        NewTeam[i] = BaseDayMonster;
+                        break;
+                    case "dawn":
+                        DawnMonster BaseDawnMonster = new DawnMonster("none", 0, 0, 0);
+                        BaseDawnMonster.Load(reader);
+                        NewTeam[i] = BaseDawnMonster;
+                        break;
+                    case "dusk":
+                        DuskMonster BaseDuskMonster = new DuskMonster("none", 0, 0, 0);
+                        BaseDuskMonster.Load(reader);
+                        NewTeam[i] = BaseDuskMonster;
+                        break;
                 }
             }
             _player.ReInitializeTeam(NewTeam);
 
-            if (reader.ReadLine() != _currentScene.ToString())
+            //Since player can only save in districts, the switch only checks for the district scenes.
+            switch (reader.ReadLine())
             {
-                return LoadSuccess = false;
+                case "DAWNDISTRICT":
+                    _currentScene = Scene.DAWNDISTRICT;
+                    break;
             }
             reader.Close();
             return LoadSuccess;
@@ -112,7 +132,7 @@ namespace MonsterFighter
         void InitializePets()
         {
             //Starters
-            _brightling = new DayMonster("Brightling", 300, 30, 40);
+            _brightling = new DayMonster("Brightling", 300, 30, 20);
             _moonHush = new NightMonster("Moonhush", 200, 50, 30);
             _Dopey = new DuskMonster("Dopey", 200, 30, 40);
             _SunnySide = new DawnMonster("SunnySide", 400, 20, 30);
@@ -277,6 +297,7 @@ namespace MonsterFighter
                 case 2:
                     if (!Load())
                     {
+                        Console.WriteLine("There was an error loading the save file");
                         Console.ReadKey(true);
                     }
                     break;
@@ -628,7 +649,7 @@ namespace MonsterFighter
                 //Checks advantage
                 Console.WriteLine(_currentEnemyMonster.GetName + " has advantage!");
             }
-            _currentEnemyMonster.DecreaseHealth(damagetaken);
+            _currentPlayerMonster.DecreaseHealth(damagetaken);
             Console.ReadKey(true);
             Console.Clear();
         }
