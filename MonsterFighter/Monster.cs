@@ -37,7 +37,6 @@ namespace MonsterFighter
 
         //Abstract Methods
         public abstract bool GetAdvantage(Monster Opponent);
-        public abstract void WritePetStats();
 
 
         //Virtual Methods 
@@ -72,6 +71,18 @@ namespace MonsterFighter
         public virtual void Save(StreamWriter writer)
         {
             writer.WriteLine(MonsterType.ToString());
+        }
+
+        /// <summary>
+        /// Writes the stats of the pet out in the console.
+        /// </summary>
+        public virtual void WritePetStats()
+        {
+            Console.WriteLine("Name:" + GetName);
+            Console.WriteLine("Type: " + MonsterType.ToString());
+            Console.WriteLine("HP:" + GetHealth + "/" + GetMaxHealth);
+            Console.WriteLine("Attack:" + GetAttackPwr);
+            Console.WriteLine("Defense:" + GetDefensePwr);
         }
     }
 }

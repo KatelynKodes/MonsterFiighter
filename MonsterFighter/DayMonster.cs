@@ -38,17 +38,5 @@ namespace MonsterFighter
 
             return advantage;
         }
-
-        /// <summary>
-        /// Writes the stats of the pet out in the console.
-        /// </summary>
-        public override void WritePetStats()
-        {
-            Console.WriteLine("Name:" + GetName);
-            Console.WriteLine("Type: Day");
-            Console.WriteLine("HP:" + GetHealth + "/" + GetMaxHealth);
-            Console.WriteLine("Attack:" + GetAttackPwr);
-            Console.WriteLine("Defense:" + GetDefensePwr);
-        }
     }
 }

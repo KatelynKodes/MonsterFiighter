@@ -37,15 +37,6 @@ namespace MonsterFighter
             return advantage;
         }
 
-        public override void WritePetStats()
-        {
-            Console.WriteLine("Name:" + GetName);
-            Console.WriteLine("Type: Night");
-            Console.WriteLine("HP:" + GetHealth +  "/" + GetMaxHealth);
-            Console.WriteLine("Attack:" + GetAttackPwr);
-            Console.WriteLine("Defense:" + GetDefensePwr);
-        }
-
         public override void Save(StreamWriter writer)
         {
             base.Save(writer);

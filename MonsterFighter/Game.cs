@@ -21,7 +21,7 @@ namespace MonsterFighter
         private Scene _currentScene;
         private bool _gameOver;
         private Player _player;
-        bool ExitDistrictMenu;
+        private bool _exitDistrictMenu;
         private Enemy _currentEnemy;
         private Monster _currentEnemyMonster;
         private Monster _currentPlayerMonster;
@@ -376,8 +376,8 @@ namespace MonsterFighter
             Console.WriteLine("You venture along until you reach the first district, a city known for it's plentiful variety of dawn and dusk Etherians");
             Console.WriteLine("It's in this district a Priestess by the name of Dawn resides, her name fitting for the types that she wields.");
             Console.ReadKey(true);
-            ExitDistrictMenu = false;
-            while (!ExitDistrictMenu) 
+            _exitDistrictMenu = false;
+            while (!_exitDistrictMenu) 
             {
                 int GoToArea = GetInput("Where would you like to go?", "Etherian Hospital", "Church of Sunrise", "Church of Ether");
                 switch (GoToArea)
@@ -408,7 +408,7 @@ namespace MonsterFighter
                             _currentEnemy = _dawnEnemy;
                             _currentEnemyMonster = _dawnEnemy.GetTeam[_dawnEnemy.GetCurrMonIndex];
                             _currentPlayerMonster = _player.GetTeam[_player.GetCurrMonIndex];
-                            ExitDistrictMenu = true;
+                            _exitDistrictMenu = true;
                             _currentScene = Scene.DAWNBATTLE;
                         }
                         break;
@@ -579,7 +579,7 @@ namespace MonsterFighter
                     case 3:
                         _gameOver = true;
                         finishedChurch = true;
-                        ExitDistrictMenu = true;
+                        _exitDistrictMenu = true;
                         break;
                     //leaves the church
                     case 4:
