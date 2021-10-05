@@ -81,8 +81,14 @@ namespace MonsterFighter
 
         public bool Load()
         {
-            StreamReader reader = new StreamReader("DawnOfNightSaveData.txt");
             bool LoadSuccess = true;
+            if (!File.Exists("DawnOfNightSaveData.txt"))
+            {
+                return LoadSuccess = false;
+            }
+
+            StreamReader reader = new StreamReader("DawnOfNightSaveData.txt");
+
             if(!_player.Load(reader))
             {
                 return LoadSuccess = false;
@@ -129,25 +135,29 @@ namespace MonsterFighter
             return LoadSuccess;
         }
 
+        /// <summary>
+        /// Initializes the starter pets the player can have
+        /// </summary>
         void InitializePets()
         {
             //Starters
             _brightling = new DayMonster("Brightling", 300, 30, 20);
             _moonHush = new NightMonster("Moonhush", 200, 50, 30);
             _Dopey = new DuskMonster("Dopey", 200, 30, 40);
-            _SunnySide = new DawnMonster("SunnySide", 400, 20, 30);
+            _SunnySide = new DawnMonster("SunnySide", 400, 20, 30);           
+        }
 
+        /// <summary>
+        /// Initializes Enemies and Enemy Monsters
+        /// </summary>
+        void InitializeEnemies()
+        {
             //Enemy monsters
             //Dawn Team
             _whispurn = new DuskMonster("Whispurn", 300, 30, 20);
             _Snoozem = new DuskMonster("Snoozem", 200, 30, 40);
             _EarlyBird = new DawnMonster("EarlyBird", 400, 20, 30);
             _dawnMonsters = new Monster[] { _whispurn, _Snoozem, _EarlyBird };
-            
-        }
-
-        void InitializeEnemies()
-        {
             _dawnEnemy = new Enemy("Dawn", _dawnMonsters);
         }
 
@@ -244,6 +254,8 @@ namespace MonsterFighter
                         Console.WriteLine("LADY DAWN: Alright fair enough, I'll allow it.");
                         Console.ReadKey(true);
                         Console.WriteLine("LADY DAWN: Allow me tell you a bit about Dawn and Dusk Types.");
+                        //Sets the player index back to 0
+                        _player.SetCurrentIndex(0); 
                         _currentScene = Scene.DAWNDUSKSELECT;
 
                     }
@@ -268,6 +280,8 @@ namespace MonsterFighter
                             + " Doesn't have to fight alone ^^");
                         Console.ReadKey(true);
                         Console.WriteLine("LADY DAWN: Allow me tell you a bit about Dawn and Dusk Types.");
+                        //Sets the player index back to 0
+                        _player.SetCurrentIndex(0);
                         _currentScene = Scene.DAWNDUSKSELECT;
                     }
                     break;
@@ -328,6 +342,9 @@ namespace MonsterFighter
             }
         }
 
+        /// <summary>
+        /// The scene where the Player can choose their starter pets
+        /// </summary>
         void ChoosePetScene()
         {
             Console.Clear();
@@ -380,17 +397,22 @@ namespace MonsterFighter
                 "Tell me, which Etherian would you like?", _moonHush, _brightling);
             Console.WriteLine("PRIEST: Ah! a " + _player.GetTeam[0].GetName + ", wonderful choice!");
             Console.ReadKey(true);
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("PRIEST: Before you head off to the first district there is one more thing I'd like you to know");
             Console.ReadKey(true);
             Console.WriteLine("PRIEST: There should be 2 churches in each district, one being the church of whomever you're battling and The Church of Ether");
             Console.ReadKey(true);
             Console.WriteLine("PRIEST: You can SAVE, LOAD, and QUIT in the Churches of Ether");
             Console.ReadKey(true);
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("PRIEST: That is all the information I have for you, " + _player.GetName + ", go forth and do well. May the Etherians bless you.");
             Console.ReadKey(true);
             _currentScene = Scene.DAWNDISTRICT;
         }
 
+        /// <summary>
+        /// The scene where the Player enters the dawn district
+        /// </summary>
         void District1Scene()
         {
             Console.Clear();
@@ -407,9 +429,10 @@ namespace MonsterFighter
                         Hospital(_player.GetTeam);
                         break;
                     case 2:
-                        if (CheckBattleState(_player).ToLower() == "lose")
+                        if (CheckBattleState(_player).ToLower() == "lost")
                         {
                             Console.WriteLine("You cannot go into battle as all of your party members are incapacitated");
+                            Console.ReadKey(true);
                         }
                         else
                         {
@@ -426,6 +449,7 @@ namespace MonsterFighter
                             Console.WriteLine("LADY DAWN: Very well then, let me see what you're capable of, if you win against me I'll share " +
                                 "my knowledge of Dawn and Dusk types with you.");
                             Console.ReadKey(true);
+                            InitializeEnemies();
                             _currentEnemy = _dawnEnemy;
                             _currentEnemyMonster = _dawnEnemy.GetTeam[_dawnEnemy.GetCurrMonIndex];
                             _currentPlayerMonster = _player.GetTeam[_player.GetCurrMonIndex];
@@ -441,6 +465,9 @@ namespace MonsterFighter
             
         }
 
+        /// <summary>
+        /// The scene where the player can choose their dawn or dusk pet
+        /// </summary>
         void DawnAndDuskSelect()
         {
             Console.WriteLine("LADY DAWN: Dawn and Dusk types are bred Etherians, they are only born when a Day Type Etherian and a Night Type Etherian" +
@@ -471,7 +498,7 @@ namespace MonsterFighter
                 "I just recently hatched them and they're duplicates, so I have more than enough.");
             ChoosePet("LADY DAWN: So tell me, " + _player.GetName + ", Which Etherian would you prefer?\nWARNING: YOU ARE APPROACHING THE END OF THE DEMO",
                 _SunnySide, _Dopey);
-            Console.WriteLine("LADY DAWN: Ah! a " + _player.GetTeam[1] + ", wondeful!");
+            Console.WriteLine("LADY DAWN: Ah! a " + _player.GetTeam[1].GetName + ", wondeful!");
             Console.ReadKey(true);
             Console.WriteLine("LADY DAWN: Well I'll go ahead and send you on your way, run along now. Good luck beating the others, they're quite strong");
             Console.ReadKey(true);
@@ -536,19 +563,19 @@ namespace MonsterFighter
         /// <param name="TeamToHeal"> The team of monsters the player would like to heal</param>
         void Hospital(Monster[] TeamToHeal)
         {
-            Console.WriteLine("NURSE PENNY: Welcome to the Etherial Hospital");
+            Console.WriteLine("NURSE SELENE: Welcome to the Etherial Hospital");
 
             //while finishedhospital is false, the player will not exit this loop
             bool finishedhospital = false;
             while (!finishedhospital)
             {
                 //Asks the player what they'd like to do
-                int HospitalOptions = GetInput("NURSE PENNY: How may we be of service to you today?", "Heal Team", "Leave Hospital");
+                int HospitalOptions = GetInput("NURSE SELENE: How may we be of service to you today?", "Heal Team", "Leave Hospital");
                 switch (HospitalOptions)
                 {
                     //Heals Etherians
                     case 1:
-                        Console.WriteLine("NURSE PENNY: Sure, let me just take your etherians off your hands so I can heal them.");
+                        Console.WriteLine("NURSE SELENE: Sure, let me just take your etherians off your hands so I can heal them.");
                         Console.ReadKey(true);
                         float amountToHeal;
                         //Loops through the array of monsters to heal
@@ -562,7 +589,9 @@ namespace MonsterFighter
                                 TeamToHeal[i].IncreaseHealth(amountToHeal);
                             }
                         }
-                        Console.WriteLine("NURSE PENNY: There you go, all your Etherians should be restored to full health");
+                        Console.WriteLine("NURSE SELENE: There you go, all your Etherians should be restored to full health");
+                        //Sets the players current index back to 0
+                        _player.SetCurrentIndex(0);
                         Console.ReadKey(true);
                         break;
 

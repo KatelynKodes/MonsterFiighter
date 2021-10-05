@@ -15,13 +15,14 @@ namespace MonsterFighter
         public override Monster[] GetTeam => _team;
         public override int GetCurrMonIndex => _currMonsterIndex;
 
+        //Property that returns the monster team length
         public int GetMonsterTeamLength 
         {
             get
             { return _monsterTeamLength; } 
         }
 
-
+        //Constructor
         public Player()
         {
             _name = "Young Seminary";
@@ -38,6 +39,10 @@ namespace MonsterFighter
             _name = NewName;
         }
 
+        /// <summary>
+        /// Reinitializes the team
+        /// </summary>
+        /// <param name="newteam"> The new team array the team variable is reassigned to</param>
         public void ReInitializeTeam(Monster[] newteam)
         {
             _team = newteam;
@@ -59,6 +64,11 @@ namespace MonsterFighter
             _monsterTeamLength = _team.Length;
         }
 
+
+        /// <summary>
+        /// Writes player specific stats to a txt file
+        /// </summary>
+        /// <param name="writer">Writer used to write the stats to the txt file</param>
         public override void Save(StreamWriter writer)
         {
             base.Save(writer);
@@ -69,6 +79,11 @@ namespace MonsterFighter
             }
         }
 
+        /// <summary>
+        /// Reads Player specific stats to 
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         public override bool Load(StreamReader reader)
         {
             bool success = true;

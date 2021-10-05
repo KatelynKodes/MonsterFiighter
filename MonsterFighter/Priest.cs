@@ -45,12 +45,31 @@ namespace MonsterFighter
             return checkIndex;
         }
 
+        /// <summary>
+        /// Sets the Current Monster index to a number
+        /// </summary>
+        /// <param name="numtoSet"> number the current monster index is set to</param>
+        public void SetCurrentIndex(int numtoSet)
+        {
+            _currMonsterIndex = numtoSet;
+        }
+
+        /// <summary>
+        /// Writes the priests data to a txt file using a writer
+        /// </summary>
+        /// <param name="writer"> The writer beinng used to write to the text file.s</param>
         public virtual void Save(StreamWriter writer)
         {
             writer.WriteLine(_name);
             writer.WriteLine(_currMonsterIndex);
         }
 
+        /// <summary>
+        /// Reads the priests data from a text file using a reader
+        /// changes the values to match the values read in the .txt file
+        /// </summary>
+        /// <param name="reader"> The reader used to read the text file</param>
+        /// <returns></returns>
         public virtual bool Load(StreamReader reader)
         {
             bool loadSuccess = true;

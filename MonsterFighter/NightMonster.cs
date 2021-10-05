@@ -26,6 +26,11 @@ namespace MonsterFighter
             MonsterType = type.NIGHT;
         }
 
+        /// <summary>
+        /// Checks the monsters advantage over an opponent
+        /// </summary>
+        /// <param name="Opponent"> The opposing monster </param>
+        /// <returns></returns>
         public override bool GetAdvantage(Monster Opponent)
         {
             advantage = false;
@@ -37,6 +42,10 @@ namespace MonsterFighter
             return advantage;
         }
 
+        /// <summary>
+        /// Writes Monster stats to a text file.
+        /// </summary>
+        /// <param name="writer"> The writer used to write to the text file</param>
         public override void Save(StreamWriter writer)
         {
             base.Save(writer);
@@ -47,6 +56,10 @@ namespace MonsterFighter
             writer.WriteLine(defensepower);
         }
 
+        /// <summary>
+        /// Reads Monster stats from a text file.
+        /// </summary>
+        /// <param name="reader"> The reader used to read from the text file</param>
         public bool Load(StreamReader reader)
         {
             bool success = true;

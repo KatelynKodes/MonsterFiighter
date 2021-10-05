@@ -40,14 +40,32 @@ namespace MonsterFighter
 
 
         //Virtual Methods 
+
+        /// <summary>
+        /// Decreases Monster health by a certain amount
+        /// </summary>
+        /// <param name="decreasevar"> The number the health is decreased by</param>
         public virtual void DecreaseHealth(float decreasevar)
         {
             health -= decreasevar;
         }
+
+        /// <summary>
+        /// Increases Monster health by a certain amount
+        /// </summary>
+        /// <param name="decreasevar"> The number the health is Increased by</param>
         public virtual void IncreaseHealth(float increaseVar)
         {
-            health -= increaseVar;
+            health += increaseVar;
         }
+
+        /// <summary>
+        /// Does damage to a defending monster
+        /// Returns a float based on the difference between the monsters attack power and the
+        /// defending monsters defense.
+        /// </summary>
+        /// <param name="DefendingMonster"></param>
+        /// <returns></returns>
         public virtual float DoDamage(Monster DefendingMonster)
         {
             float damagedealt = GetAttackPwr - DefendingMonster.GetDefensePwr;
@@ -68,6 +86,10 @@ namespace MonsterFighter
             return damagedealt;
         }
 
+        /// <summary>
+        /// Saves the monsters type to a text file as a string using a writer
+        /// </summary>
+        /// <param name="writer"> The writer used to write the stat to the txt file</param>
         public virtual void Save(StreamWriter writer)
         {
             writer.WriteLine(MonsterType.ToString());

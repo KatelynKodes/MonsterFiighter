@@ -7,6 +7,7 @@ namespace MonsterFighter
 {
     class DayMonster : Monster
     {
+        // Properties
         public override string GetName => name;
         public override float GetHealth => health;
         public override float GetMaxHealth => maxHealth;
@@ -14,6 +15,7 @@ namespace MonsterFighter
         public override float GetAttackPwr => attackpower;
         public override float GetDefensePwr => defensepower;
 
+        // Constructor 
         public DayMonster(string monstrname, float hp, float attk, float def)
         {
             name = monstrname;
@@ -40,6 +42,10 @@ namespace MonsterFighter
             return advantage;
         }
 
+        /// <summary>
+        /// Writes Monster stats to a text file.
+        /// </summary>
+        /// <param name="writer"> The writer used to write to the text file</param>
         public override void Save(StreamWriter writer)
         {
             base.Save(writer);
@@ -50,6 +56,10 @@ namespace MonsterFighter
             writer.WriteLine(defensepower);
         }
 
+        /// <summary>
+        /// Reads Monster stats from a text file.
+        /// </summary>
+        /// <param name="reader"> The reader used to read from the text file</param>
         public bool Load(StreamReader reader)
         {
             bool success = true;
